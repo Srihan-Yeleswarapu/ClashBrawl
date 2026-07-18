@@ -27,24 +27,20 @@ jobs:
       - name: Show Xcode version
         run: xcodebuild -version
 
-      # Build the Swift Package (library sources only; App target excluded).
-      # Once you add the .xcodeproj, replace this step with xcodebuild.
-      - name: Build Swift Package
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
         working-directory: ClashBrawl
-        run: swift build
+        run: xcodegen generate
 
-      # Uncomment after creating the Xcode project:
-      # - name: Build Xcode project
-      #   run: |
-      #     xcodebuild clean build \
-      #       -project ClashBrawl.xcodeproj \
-      #       -scheme ClashBrawl \
-      #       -destination 'platform=iOS Simulator,name=iPhone 15' \
-      #       CODE_SIGNING_ALLOWED=NO
-
-      # - name: Run unit tests
-      #   run: |
-      #     xcodebuild test \
-      #       -project ClashBrawl.xcodeproj \
-      #       -scheme ClashBrawl \
-      #       -destination 'platform=iOS Simulator,name=iPhone 15'
+      - name: Build Xcode project
+        working-directory: ClashBrawl
+        run: |
+          xcodebuild clean build \
+            -project ClashBrawl.xcodeproj \
+            -scheme ClashBrawl \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            ENTITLEMENTS_REQUIRED=NO
