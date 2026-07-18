@@ -13,19 +13,31 @@ permissions:
 jobs:
   build:
     name: Build
-    runs-on: macos-latest
+    runs-on: macos-26
 
     steps:
       - name: Checkout
         uses: actions/checkout@692231e42914ac536f5f6c4a4e9fa0edc028f5d2 # v4.1.6
 
       - name: Select Xcode version
-        uses: maxim-lobanov/setup-xcode@7f5bc5ee44f1c541b1c4a1facc6b6fe8a7e45dc4 # v1.6.0
-        with:
-          xcode-version: latest-stable
+        # Prefer Xcode 26.6 (matches project.yml `xcodeVersion: "26.6"`),
+        # falling back gracefully to any Xcode 26.x point release.
+        run: |
+          XCODE_PATH=$(ls -d /Applications/Xcode_26.6*.app 2>/dev/null | sort -V | tail -1)
+          if [ -z "$XCODE_PATH" ]; then
+            XCODE_PATH=$(ls -d /Applications/Xcode_26.*.app 2>/dev/null | sort -V | tail -1)
+          fi
+          if [ -z "$XCODE_PATH" ]; then
+            echo "[ERROR] No Xcode 26.x installed on this runner."
+            ls -d /Applications/Xcode_* 2>/dev/null
+            exit 1
+          fi
+          echo "Selecting: $XCODE_PATH"
+          sudo xcode-select -s "$XCODE_PATH/Contents/Developer"
+          xcodebuild -version
 
-      - name: Show Xcode version
-        run: xcodebuild -version
+      - name: Download iOS Platform
+        run: sudo xcodebuild -downloadPlatform iOS
 
       - name: Install XcodeGen
         run: brew install xcodegen
