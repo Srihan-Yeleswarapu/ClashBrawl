@@ -1,0 +1,45 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  build:
+    name: Build and Test
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode version
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      # The project currently uses a Swift Package + Xcode app target placeholder.
+      # Once you add the .xcodeproj, replace the swift build step with xcodebuild.
+      - name: Build Swift Package
+        run: swift build
+
+      # Uncomment after creating the Xcode project:
+      # - name: Build Xcode project
+      #   run: |
+      #     xcodebuild clean build \
+      #       -project ClashBrawl.xcodeproj \
+      #       -scheme ClashBrawl \
+      #       -destination 'platform=iOS Simulator,name=iPhone 15' \
+      #       CODE_SIGNING_ALLOWED=NO
+
+      # - name: Run unit tests
+      #   run: |
+      #     xcodebuild test \
+      #       -project ClashBrawl.xcodeproj \
+      #       -scheme ClashBrawl \
+      #       -destination 'platform=iOS Simulator,name=iPhone 15'

@@ -1,0 +1,21 @@
+# SwiftLint configuration for ClashBrawl
+
+included:
+  - ClashBrawl
+
+excluded:
+  - .build
+  - DerivedData
+
+line_length:
+  warning: 160
+  error: 200
+
+disabled_rules:
+  - trailing_whitespace
+
+opt_in_rules:
+  - empty_count
+  - missing_docs
+
+reporter: "github-actions-json"

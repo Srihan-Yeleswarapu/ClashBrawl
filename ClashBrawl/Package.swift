@@ -15,8 +15,7 @@ let package = Package(
     targets: [
         .target(
             name: "ClashBrawl",
-            path: "ClashBrawl",
-            exclude: ["App/ClashBrawlApp.swift"]
+            path: "ClashBrawl"
         )
     ]
 )
