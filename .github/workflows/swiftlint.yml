@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@692231e42914ac5ddfe5ee44f1c541b1c4a1e9fa0edc028f5d2 # v4.1.6
 
       - name: SwiftLint
-        uses: norio-nomura/action-swiftlint@3.2.1
+        uses: norio-nomura/action-swiftlint@4384b0741583f9e3f5c5c331eb24d52a2b6c5b5 # v3.2.1
         with:
           args: --strict
         env:
