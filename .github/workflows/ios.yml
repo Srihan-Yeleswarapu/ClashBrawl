@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main, master]
 
+# Restrict permissions for security
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build and Test
@@ -13,19 +17,20 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@692231e42914ac536f5f6c4a4e9fa0edc028f5d2 # v4.1.6
 
       - name: Select Xcode version
-        uses: maxim-lobanov/setup-xcode@v1
+        uses: maxim-lobanov/setup-xcode@7f5bc5ee44f1c541b1c4a1facc6b6fe8a7e45dc4 # v1.6.0
         with:
           xcode-version: latest-stable
 
       - name: Show Xcode version
         run: xcodebuild -version
 
-      # The project currently uses a Swift Package + Xcode app target placeholder.
-      # Once you add the .xcodeproj, replace the swift build step with xcodebuild.
+      # Build the Swift Package (library sources only; App target excluded).
+      # Once you add the .xcodeproj, replace this step with xcodebuild.
       - name: Build Swift Package
+        working-directory: ClashBrawl
         run: swift build
 
       # Uncomment after creating the Xcode project:
